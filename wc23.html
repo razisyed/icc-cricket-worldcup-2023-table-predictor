@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket World Cup</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cricket World Cup</h1>
+
+    <div style="width: 50%; float: left">
+        <h2>Games</h2>
+        <table>
+            <tr>
+                <th>Match</th>
+                <th>Team A</th>
+                <th>Team B</th>
+                <th>Winner</th>
+            </tr>
+            <!-- JavaScript will populate the table dynamically -->
+        </table>
+    </div>
+    <div style="width: 50%; float: left">
+        <h2>Points Table</h2>
+        <table id="pointsTable">
+            <tr>
+                <th>Team</th>
+                <th>Points</th>
+            </tr>
+            <!-- Points table will be dynamically updated here -->
+        </table>
+    </div>
+    <script>
+        const teams = [
+            "Afghanistan",
+            "Australia",
+            "Bangladesh",
+            "England",
+            "India",
+            "Netherlands",
+            "New Zealand",
+            "Pakistan",
+            "South Africa",
+            "Sri Lanka"
+        ];
+
+        const points = {};
+
+        // Initialize points table
+        teams.forEach(team => {
+            points[team] = 0;
+        });
+
+        // Schedule array
+        const schedule = [
+    { match: "Match 1", teamA: "England", teamB: "New Zealand", defaultWinner: "none" },
+    { match: "Match 2", teamA: "Pakistan", teamB: "Netherlands", defaultWinner: "none" },
+    { match: "Match 3", teamA: "Bangladesh", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 4", teamA: "South Africa", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 5", teamA: "India", teamB: "Australia", defaultWinner: "none" },
+    { match: "Match 6", teamA: "New Zealand", teamB: "Netherlands", defaultWinner: "none" },
+    { match: "Match 7", teamA: "England", teamB: "Bangladesh", defaultWinner: "none" },
+    { match: "Match 8", teamA: "India", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 9", teamA: "Australia", teamB: "South Africa", defaultWinner: "none" },
+    { match: "Match 10", teamA: "New Zealand", teamB: "Bangladesh", defaultWinner: "none" },
+    { match: "Match 11", teamA: "India", teamB: "Pakistan", defaultWinner: "none" },
+    { match: "Match 12", teamA: "England", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 13", teamA: "Australia", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 14", teamA: "South Africa", teamB: "Netherlands", defaultWinner: "none" },
+    { match: "Match 15", teamA: "New Zealand", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 16", teamA: "India", teamB: "Bangladesh", defaultWinner: "none" },
+    { match: "Match 17", teamA: "Australia", teamB: "Pakistan", defaultWinner: "none" },
+    { match: "Match 18", teamA: "Netherlands", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 19", teamA: "England", teamB: "South Africa", defaultWinner: "none" },
+    { match: "Match 20", teamA: "India", teamB: "New Zealand", defaultWinner: "none" },
+    { match: "Match 21", teamA: "Pakistan", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 22", teamA: "South Africa", teamB: "Bangladesh", defaultWinner: "none" },
+    { match: "Match 23", teamA: "Australia", teamB: "Netherlands", defaultWinner: "none" },
+    { match: "Match 24", teamA: "England", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 25", teamA: "Pakistan", teamB: "South Africa", defaultWinner: "none" },
+    { match: "Match 26", teamA: "Australia", teamB: "New Zealand", defaultWinner: "none" },
+    { match: "Match 27", teamA: "Netherlands", teamB: "Bangladesh", defaultWinner: "none" },
+    { match: "Match 28", teamA: "India", teamB: "England", defaultWinner: "none" },
+    { match: "Match 29", teamA: "Afghanistan", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 30", teamA: "Pakistan", teamB: "Bangladesh", defaultWinner: "none" },
+    { match: "Match 31", teamA: "New Zealand", teamB: "South Africa", defaultWinner: "none" },
+    { match: "Match 32", teamA: "India", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 33", teamA: "Netherlands", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 34", teamA: "New Zealand", teamB: "Pakistan", defaultWinner: "none" },
+    { match: "Match 35", teamA: "England", teamB: "Australia", defaultWinner: "none" },
+    { match: "Match 36", teamA: "India", teamB: "South Africa", defaultWinner: "none" },
+    { match: "Match 37", teamA: "Bangladesh", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 38", teamA: "Australia", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 39", teamA: "England", teamB: "Netherlands", defaultWinner: "none" },
+    { match: "Match 40", teamA: "New Zealand", teamB: "Sri Lanka", defaultWinner: "none" },
+    { match: "Match 41", teamA: "South Africa", teamB: "Afghanistan", defaultWinner: "none" },
+    { match: "Match 42", teamA: "Australia", teamB: "Bangladesh", defaultWinner: "none" },
+    { match: "Match 43", teamA: "England", teamB: "Pakistan", defaultWinner: "none" },
+    { match: "Match 44", teamA: "India", teamB: "Netherlands", defaultWinner: "none" },
+];
+
+        // Function to populate the games table
+        function populateGamesTable() {
+            const gamesTable = document.querySelector("table");
+            schedule.forEach((match, index) => {
+                const row = gamesTable.insertRow(index + 1);
+                row.innerHTML = `
+                    <td>${match.match}</td>
+                    <td>${match.teamA}</td>
+                    <td>${match.teamB}</td>
+                    <td>
+                        <select onchange="updatePoints(this)">
+                            <option value="none">Select Winner</option>
+                            <option value="${match.teamA}">${match.teamA}</option>
+                            <option value="${match.teamB}">${match.teamB}</option>
+                        </select>
+                    </td>
+                `;
+            });
+        }
+
+        populateGamesTable(); // Call the function to populate the games table
+
+        function updatePoints(selectElement) {
+            const matchRow = selectElement.parentNode.parentNode;
+            const teamA = matchRow.children[1].textContent;
+            const teamB = matchRow.children[2].textContent;
+            const winner = selectElement.value;
+
+            const previousWinner = matchRow.getAttribute("data-winner");
+
+            if (winner === "none") {
+                // No winner selected, reset the points
+                if (previousWinner === teamA) {
+                    points[teamA] -= 2;
+                } else if (previousWinner === teamB) {
+                    points[teamB] -= 2;
+                }
+            } else {
+                // Reassign points to the new winner
+                if (previousWinner === teamA) {
+                    points[teamA] -= 2;
+                } else if (previousWinner === teamB) {
+                    points[teamB] -= 2;
+                }
+
+                if (winner === teamA) {
+                    points[teamA] += 2;
+                } else if (winner === teamB) {
+                    points[teamB] += 2;
+                }
+            }
+
+            matchRow.setAttribute("data-winner", winner);
+
+            updatePointsTable();
+        }
+
+        function updatePointsTable() {
+            const pointsTable = document.querySelector("#pointsTable");
+
+            // Create an array of team objects for sorting
+            const teamObjects = teams.map(team => ({
+                team,
+                points: points[team],
+            }));
+
+            // Sort teams based on points in descending order
+            teamObjects.sort((a, b) => b.points - a.points);
+
+            // Clear existing rows
+            while (pointsTable.rows.length > 1) {
+                pointsTable.deleteRow(1);
+            }
+
+            // Add rows to the points table
+            teamObjects.forEach((teamObj, index) => {
+                const row = pointsTable.insertRow(index + 1);
+                row.innerHTML = `
+                    <td>${teamObj.team}</td>
+                    <td>${teamObj.points}</td>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
